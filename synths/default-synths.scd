@@ -673,10 +673,10 @@ SynthDef(\fm4, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 
 // A six operator FM synth loosely based on algorithm 6
 SynthDef(\fm5, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
-	hr1 = 1, hr2 = 0, hr3 = 1, hr4 = 5, hr5 = 4, hr6 = 3,
-	mi1 = 0.35, mi3 = 1.05, mi5 = 1.75, mi6 = 2.1,
+	hr1 = 1, hr2 = 0, hr3 = 1, hr4 = 5, hr5 = 4, hr6 = 0.5,
+	mi1 = 0.35, mi3 = 1.05, mi5 = 1.25, mi6 = 0.2,
 	en1 = 0.02, en2 = 0.02, en3 = 0.02, en4 = 0.02, en5 = 0.02, en6 = 0.02,
-	cu1 = 0, cu2 = 0, cu3 = 0, cu4 = 0, cu5 = 0, cu6 = 0,
+	cu1 = 0, cu2 = 0, cu3 = 0, cu4 = 0, cu5 = 0, cu6 = 32,
 	cr1 = 0, cr2 = 0, cr3 = 0, cr4 = 0, cr5 = 0, cr6 = 0,
 	tp1 = 1, tp3 = 1, tp5 = 1,
     wid = 1,
