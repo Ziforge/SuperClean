@@ -526,11 +526,11 @@ SynthDef(\fm1, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 
 // A six operator FM synth loosely based on algorithm 3
 SynthDef(\fm2, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
-	hr1 = 1, hr2 = 2, hr3 = 1, hr4 = 2, hr5 = 3, hr6 = 4,
-	mi1 = 1.5, mi2 = 2.0, mi4 = 0.5, mi5 = 2.0, mi6 = 0.125,
-	en1 = 0.02, en2 = 0.02, en3 = 0.02, en4 = 0.02, en5 = 0.02, en6 = 0.02,
-	cu1 = 0.05, cu2 = 0.04, cu3 = 0.03, cu4 = 0.02, cu5 = 0.01, cu6 = 0,
-	cr1 = 3, cr2 = 6, cr3 = 2, cr4 = 4, cr5 = 1, cr6 = 8,
+	hr1 = 1, hr2 = 1, hr3 = 1, hr4 = 2, hr5 = 4, hr6 = 2,
+	mi1 = 4.0, mi2 = 1.0, mi4 = 0.5, mi5 = 4.0, mi6 = 8.0,
+	en1 = 0.0, en2 = 0.1, en3 = 0.2, en4 = 0.3, en5 = 0.04, en6 = 0.05,
+	cu1 = 8, cu2 = 6, cu3 = 4, cu4 = 2, cu5 = 1, cu6 = -1,
+	cr1 = -16, cr2 = -2, cr3 = -4, cr4 = -8, cr5 = -16, cr6 = -32,
 	tp1 = 1, tp4 = 1,
     wid = 1,
 	bnd = 0, bno = 0, bnt = 0.2, bnc = 0|
