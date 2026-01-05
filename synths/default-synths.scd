@@ -28,7 +28,7 @@ presetStore = { |synth, verbose = false|
 
 // An additive synth.
 SynthDef(\add,  {| out, ada = 0.001, adr = 1, amp = 1, adc = 1, freq = 200, pan = 0.5, slw = 0.001
-	bnd = 0, bno = 0, bnt = 0.2, bnc = 0|
+	bnd = 0, bno = 0, bnt = 0.2, bnc = 0, atk = 0.005|
 	var ee, e, o, freqclipped, gliss;
 	gliss = EnvGen.kr(Env(
         [1, 1, 1 + bnd.clip(-1.0, 1.0)],
@@ -49,11 +49,11 @@ SynthDef(\add,  {| out, ada = 0.001, adr = 1, amp = 1, adc = 1, freq = 200, pan 
 
 // This synthdef builds on the work of Nathan Ho. https://nathan.ho.name/posts/ixa-synthesis/
 SynthDef(\ixa, {| out, sustain = 1, pan, amp = 0.5, freq = 440, bnd = 0, bno = 0, bnt = 0.2, bnc = 0,
-    bes = 2, abs = 2, ths = 2, ber = 1, abr = 1, thr = 1, crv, atk = 0.0, rel = 1.0|
+    bes = 2, abs = 2, ths = 2, ber = 1, abr = 1, thr = 1, atk = 0.005, hld = 0, rel = 1.0, crv = -8.0, crt = 8.0|
 	var phase;
 	var slopeBelow, slopeAbove, threshold;
 	var env, gliss, sig, freqclipped;
-	env = Env.perc(atk, rel, amp, crv).kr(doneAction: 2);
+	env = EnvGen.ar(Env.linen(atk, hld, rel, 1, [crv, 0, crt]));
 	gliss = EnvGen.kr(Env(
         [1, 1, 1 + bnd.clip(-1.0, 1.0)],
         [bno, bnt],
@@ -124,7 +124,7 @@ SynthDef(\vct, {
 
 
 // A saw wave oscillator.
-SynthDef(\saw, {|out = 0, sustain = 1, bnd = 0, bno = 0, bnt = 0.2, bnc = 0, freq = 440, iph = 0, wid = 0.25, amp = 1.0, pan = 0, atk = 0.0, hld = 0.0, rel = 1.0, crv = -8.0, crt = 8.0|
+SynthDef(\saw, {|out = 0, sustain = 1, bnd = 0, bno = 0, bnt = 0.2, bnc = 0, freq = 440, iph = 0, wid = 0.25, amp = 1.0, pan = 0, atk = 0.005, hld = 0.0, rel = 1.0, crv = -8.0, crt = 8.0|
 	var env, gliss, sig, freqclipped;
 	env = EnvGen.ar(Env.linen(atk, hld, rel, 1, [crv, 0, crt]));
 	gliss = EnvGen.kr(Env(
@@ -526,11 +526,11 @@ SynthDef(\fm1, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 
 // A six operator FM synth loosely based on algorithm 3
 SynthDef(\fm2, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
-	hr1 = 1, hr2 = 1, hr3 = 1, hr4 = 2, hr5 = 4, hr6 = 2,
-	mi1 = 4.0, mi2 = 1.0, mi4 = 0.5, mi5 = 4.0, mi6 = 8.0,
-	en1 = 0.0, en2 = 0.1, en3 = 0.2, en4 = 0.3, en5 = 0.04, en6 = 0.05,
-	cu1 = 8, cu2 = 6, cu3 = 4, cu4 = 2, cu5 = 1, cu6 = -1,
-	cr1 = -16, cr2 = -2, cr3 = -4, cr4 = -8, cr5 = -16, cr6 = -32,
+	hr1 = 1, hr2 = 2, hr3 = 1, hr4 = 2, hr5 = 3, hr6 = 4,
+	mi1 = 0.25, mi2 = 1.0, mi4 = 0.5, mi5 = 1.0, mi6 = 0.125,
+	en1 = 0.0, en2 = 0.02, en3 = 0.02, en4 = 0.02, en5 = 0.02, en6 = 0.02,
+	cu1 = 0.5, cu2 = 0.4, cu3 = 0.3, cu4 = 0.2, cu5 = 0.1, cu6 = 0,
+	cr1 = 3, cr2 = 6, cr3 = 2, cr4 = 4, cr5 = 1, cr6 = 8,
 	tp1 = 1, tp4 = 1,
     wid = 1,
 	bnd = 0, bno = 0, bnt = 0.2, bnc = 0|
@@ -673,10 +673,10 @@ SynthDef(\fm4, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 
 // A six operator FM synth loosely based on algorithm 6
 SynthDef(\fm5, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
-	hr1 = 1, hr2 = 0, hr3 = 1, hr4 = 5, hr5 = 4, hr6 = 0.5,
-	mi1 = 0.35, mi3 = 1.05, mi5 = 1.25, mi6 = 0.2,
+	hr1 = 1, hr2 = 0, hr3 = 1, hr4 = 5, hr5 = 4, hr6 = 3,
+	mi1 = 0.35, mi3 = 1.05, mi5 = 1.75, mi6 = 2.1,
 	en1 = 0.02, en2 = 0.02, en3 = 0.02, en4 = 0.02, en5 = 0.02, en6 = 0.02,
-	cu1 = 0, cu2 = 0, cu3 = 0, cu4 = 0, cu5 = 0, cu6 = 32,
+	cu1 = 0, cu2 = 0, cu3 = 0, cu4 = 0, cu5 = 0, cu6 = 0,
 	cr1 = 0, cr2 = 0, cr3 = 0, cr4 = 0, cr5 = 0, cr6 = 0,
 	tp1 = 1, tp3 = 1, tp5 = 1,
     wid = 1,
@@ -2016,14 +2016,14 @@ SynthDef(\fmv, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 	Out.ar(out, Limiter.ar(sig.sanitize));
 }).store;
 
-// A six operator FM synth loosely based on algorithm 32
-SynthDef(\fmv, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
-	hr1 = 0.25, hr2 = 0.5, hr3 = 1.0, hr4 = 2.0, hr5 = 4.0, hr6 = 8.0,
-	mi1 = 0.0, mi2 = 4.0, mi3 = 8.0, mi4 = 16.0, mi5 = 32.0, mi6 = 64.0,
-	en1 = 0.0, en2 = 0.0625, en3 = 0.125, en4 = 0.25, en5 = 0.5, en6 = 1.0,
-	cu1 = 0.0, cu2 = 2.0, cu3 = 4.0, cu4 = 8.0, cu5 = 16.0, cu6 = 32.0,
+// A six operator FM synth with a lil more modulation, it's not all there, but it can do some stuff
+SynthDef(\fmw, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
+	hr1 = 1, hr2 = 1, hr3 = 1, hr4 = 1, hr5 = 1, hr6 = 1,
+	mi0 = 1.0, mi1 = 1.0, mi2 = 2.5, mi3 = 1.0, mi4 = 0.5, mi5 = 2.5, mi6 = 1.0,
+	en1 = 0.01, en2 = 0.5, en3 = 0.02, en4 = 0.04, en5 = 0.03, en6 = 0.0,
+	cu1 = 0, cu2 = -2, cu3 = 0, cu4 = -1, cu5 = -6, cu6 = -2,
 	cr1 = 0, cr2 = 0, cr3 = 0, cr4 = 0, cr5 = 0, cr6 = 0,
-	tp1 = 1.5, tp2 = 0.1, tp3 = 0.05, tp4 = 0.1, tp5 = 0.1, tp6 = 0.25,
+	tp1 = 1, tp2 = 1, tp3 = 1, tp4 = 1, tp5 = 1, tp6 = 1,
     wid = 1,
 	bnd = 0, bno = 0, bnt = 0.2, bnc = 0|
 	var env1, env2, env3, env4, env5, env6, sig, sig1, sig2, sig3, sig4, sig5, sig6, modComp, gliss, freqclipped;
@@ -2048,25 +2048,22 @@ SynthDef(\fmv, {| sustain = 1, pan = 0.5, amp = 0.1, out = 0, freq = 440,
 	env6 = EnvGen.ar(Env.perc(en6.linlin(0, 1, 0.02, 0.998), 1-en6.linlin(0, 1, 0.02, 0.998), curve:[cu6, crv6]), timeScale:sustain);
 	modComp = freq.explin(20, 20000, 1, 0.01);
 
-	sig6 = SinOscFB.ar(freqclipped * hr6, mi6 * modComp) * env6 * tp6;
+    sig1 = SinOsc.ar(freqclipped * hr1, LocalIn.ar(2) + [0, width], mi1 * modComp) * env1 * tp1;
+    sig2 = SinOsc.ar(freqclipped * hr2, sig1 + [0, width], mi2 * modComp) * env2 * tp2;
 
-	sig5 = SinOscFB.ar(freqclipped * hr5, mi5 * modComp) * env5 * tp5;
+    sig3 = SinOscFB.ar(freqclipped * hr3, mi3 * modComp) * env3;
+	sig4 = SinOsc.ar(freqclipped * hr4, sig3 + [0, width], mi4 * modComp) * env4 * tp4;
 
-	sig4 = SinOscFB.ar(freqclipped * hr4, mi4 * modComp) * env4 * tp4;
+    sig5 = SinOscFB.ar(freqclipped * hr5, mi5 * modComp) * env5;
+	sig6 = SinOsc.ar(freqclipped * hr6, sig5 + [0, width], mi6 * modComp) * env6 * tp6;
 
-	sig3 = SinOscFB.ar(freqclipped * hr3, mi3 * modComp) * env3 * tp3;
-
-	sig2 = SinOscFB.ar(freqclipped * hr2, mi2 * modComp) * env2 * tp2;
-
-	sig1 = SinOscFB.ar(freqclipped * hr1, mi1 * modComp) * env1 * tp1;
+	LocalOut.ar(sig1);
+	LocalOut.ar(sig2);
 
 	sig1 = sig1 * AmpCompA.kr(freqclipped, 17.323914436055);
 	sig2 = sig2 * AmpCompA.kr(freqclipped, 17.323914436055);
-	sig3 = sig3 * AmpCompA.kr(freqclipped, 17.323914436055);
 	sig4 = sig4 * AmpCompA.kr(freqclipped, 17.323914436055);
-	sig5 = sig5 * AmpCompA.kr(freqclipped, 17.323914436055);
-	sig6 = sig6 * AmpCompA.kr(freqclipped, 17.323914436055);
-	sig = ((sig1 / 4) + (sig2 / 4) + (sig3 / 4) + (sig4 / 4) + (sig5 / 4) + (sig6 / 4)) * amp * 1.2;
+	sig = ((sig1 / 4) + (sig2 / 4) + (sig4 / 4) + (sig6 / 4)) * amp * 1.2;
 	sig = CleanPan.ar(sig, ~clean.numChannels, pan);
 	Out.ar(out, Limiter.ar(sig.sanitize));
 }).store;
