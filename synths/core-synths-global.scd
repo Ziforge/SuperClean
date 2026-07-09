@@ -137,7 +137,9 @@ They'll come back automatically.
 
 	// Impulse Response based reverb
 	//~path = Main.packages.asDict.at('SuperClean') +/+ "/clean-samples/mmd/mir/Large Church.aif";
-	~path = Main.packages.asDict.at('SuperClean') +/+ "clean-samples" +/+ "mmd" +/+ "mir" +/+ "mir-4eqed.wav";
+	// resolve from the class file location so the folder name doesn't matter
+	~path = SuperClean.filenameSymbol.asString.dirname.dirname
+		+/+ "clean-samples" +/+ "mmd" +/+ "mir" +/+ "mir-4eqed.wav";
 	~ezConvX = EZConvX(~path);
 	SynthDef(\clean_mir ++ numChannels, {
 		|dryBus, effectBus, gate = 1, in, out, mii = 1 mir = 0.0 |

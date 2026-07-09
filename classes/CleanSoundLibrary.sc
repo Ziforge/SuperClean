@@ -131,9 +131,13 @@ CleanSoundLibrary {
 		path = Main.packages.asDict.at('SuperClean');
 		if (path.isNil, {
 			path = Main.packages.asDict.at('SuperClean-main');
-			if (path.isNil, {
-				"SuperClean:: The SuperClean root folder should be named either 'SuperClean' or 'SuperClean-main'".warn;
-			})
+		});
+		// fall back to wherever this class file actually lives, so the
+		// folder can carry any name (superclean-edit, SuperClean-dev, ...)
+		// instead of returning nil and dying downstream with
+		// "Message '+/+' not understood".
+		if (path.isNil, {
+			path = SuperClean.filenameSymbol.asString.dirname.dirname;
 		});
 		^path
 	}
