@@ -83,8 +83,7 @@ the SynthDefs, but alas they do not. Default values for parameters get set in Cl
 	~clean.addModule(\fuz, { |cleanEvent|
 		cleanEvent.sendSynth(\fuz ++ ~clean.numChannels,
 			[
-				fuz: ~fuz,
-				fzv: ~fzv,
+				fzv: ~fzv ? 3,
 				out: ~out
 			]
 	)}, { ~fuz.notNil or: { ~fzv.notNil and: { ~fuz != 0.0 } } });
@@ -505,7 +504,7 @@ the SynthDefs, but alas they do not. Default values for parameters get set in Cl
 				out: ~out
 			]
 		)
-	}, { ~lbrick.notNil });
+	}, { ~lbr.notNil });
 
 	SynthDef('spectral-lbrick' ++ ~clean.numChannels, { |out, lbrick|
 		var signal, chain;
@@ -520,12 +519,12 @@ the SynthDefs, but alas they do not. Default values for parameters get set in Cl
 	~clean.addModule(\scf, { |cleanEvent|
 		cleanEvent.sendSynth('spectral-conformer' ++ ~clean.numChannels,
 			[
-				real: ~scf,
-				imag: ~img,
+				real: ~scf ? 0.5,
+				imag: ~img ? 0.5,
 				out: ~out
 			]
 		)
-	}, { ~ral.notNil or: ~img.notNil });
+	}, { ~scf.notNil or: ~img.notNil });
 
 	SynthDef('spectral-conformer' ++ ~clean.numChannels, { |out, real = 0.5, imag = 0.5|
 		var signal, chain;

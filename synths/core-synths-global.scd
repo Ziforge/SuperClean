@@ -103,7 +103,7 @@ They'll come back automatically.
 		in = in * rin.lag(LFNoise1.kr(1).range(0.01, 0.02)); // regulate input
 		4.do { in = AllpassN.ar(in, 0.02, { Rand(0.005, 0.02) }.dup(numChannels), 1) };
 		depth = rev.lag(0.02).linexp(0, 1, 0.01, 0.98); // change depth between 0.1 and 0.98
-		loop = LocalIn.ar(numChannels) * { depth + Rand(0, 0.05) }.dup(numChannels);
+		loop = LocalIn.ar(numChannels) * { (depth + Rand(0, 0.05)).min(0.98) }.dup(numChannels);
 		loop = OnePole.ar(loop, 0.5);  // 0-1
 		loop = AllpassN.ar(loop, 0.05, { Rand(0.01, 0.05) }.dup(numChannels), 2);
 		loop = DelayN.ar(loop, 0.3, [0.19, 0.26] + { Rand(-0.003, 0.003) }.dup(2));
@@ -144,7 +144,7 @@ They'll come back automatically.
 		var sig, lgt = 0.5;
 		sig = In.ar(dryBus, numChannels).asArray.sum;
 		sig = ~ezConvX.ar(sig * mii.clip(0.0, 1.0).lag(lgt), leak: 0.1, mul: 1/16);
-		sig = sig * (1 - mir.lag(lgt) - 1);
+		sig = sig * mir.lag(lgt);
 		CleanPause.ar(sig, graceTime:4);
 		Out.ar(effectBus, sig);
 	}, [\ir, \ir]).add;
@@ -157,10 +157,9 @@ They'll come back automatically.
 		signal = signal * hai.lag(lgt);
 		signal = HPF.ar(signal, hhp.clip(20,20000).lag(lgt));
 		signal = LPF.ar(signal, hlp.clip(20,20000).lag(lgt));
-		signal = signal.asArray.collect { |sig|
-			NHHall.ar(Pan2.ar(sig), rts.clip(0,999).lag(lgt), bld.lag(0.5), 200, 0.5, 4000, 0.5,
-				edf.clip(0,1).lag(lgt), ldf.clip(0,1).lag(lgt), 0, 0);
-		};
+		signal = NHHall.ar(Pan2.ar(signal.asArray.sum), rts.clip(0,999).lag(lgt), bld.lag(0.5), 200, 0.5, 4000, 0.5,
+			edf.clip(0,1).lag(lgt), ldf.clip(0,1).lag(lgt), 0, 0);
+		signal = NumChannels.ar(signal, numChannels);
 		signal = signal * EnvGen.kr(Env.asr, gate, doneAction:2);
 		signal = LeakDC.ar(signal);
 		signal = signal * hal.lag(lgt);

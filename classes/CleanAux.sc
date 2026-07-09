@@ -154,12 +154,12 @@ CleanAux {
 	}
 
 	free {
-		clean.closeNetworkConnection;
 		ServerTree.remove(this, server);
 		globalEffects.do(_.release);
 		server.freePermNodeID(group);
 		synthBus.free;
 		globalEffectBus.free;
+		dryBus.free;
 		cutGroups.clear;
 	}
 
