@@ -215,8 +215,10 @@ CleanAux {
 			~jhc = 1.0;
 			~cai = 1.0;
 			//~mii = 1;
-			~buf =  "b[0].bufnum";
-			~bufn =  "b.size";
+			// NB: \vct's buf/bufn have no useful default until a wavetable
+			// loader exists (issue #41) — the previous string placeholders
+			// ("b[0].bufnum") were sent to the server verbatim as control
+			// values. Set buf/bufn explicitly per event for now.
 			~unit = \r;
 			~midinote = #{ ~note ? ~num + (~octave * 12) };
 			~freq = #{
