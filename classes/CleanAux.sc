@@ -272,6 +272,13 @@ CleanAux {
 			~dry = 0.0;
 			~lock = 0; // if set to 1, syncs delay times with cps
 			~amp = 0.5;
+			// mirror of ~amp in decibels. SC's default parent event defines
+			// \amp as #{ ~db.dbamp }; patterns that scale \amp per event
+			// (e.g. Pdef fadeTime crossfades via PfadeIn/PfadeOut) compose
+			// with that function, so ~db must resolve after this event
+			// becomes the parent -- otherwise every fade dies with
+			// "Message 'dbamp' not understood".
+			~db = ~amp.ampdb;
 			~fadeTime = 0.001;
 
 			// values from the clean bus

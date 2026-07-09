@@ -114,6 +114,7 @@ CleanEvent {
 		var bnd = ~bnd.value;
 		var avgspd, endspd;
 		var useUnit;
+		var fadeOut, fadeIn, totalFade, maxFade;
 
 		~freq = ~freq.value;
 		unitDuration = ~unitDuration.value;
@@ -161,9 +162,25 @@ CleanEvent {
 		// for every buffer, unitDuration is (and should be) defined.
 		~buffer !? { sustain = min(unitDuration, sustain) };
 
-		~fadeTime = min(~fadeTime.value, sustain * 0.19098); // is this number magic?
-		~fadeInTime = if(~bgn != 0) { ~fadeTime } { 0.0 };
-		~sustain = sustain - (~fadeTime + ~fadeInTime);
+		// honor the requested fade times, scaling them down proportionally
+		// if together they exceed the sustain. (an earlier version clamped
+		// fadeTime to sustain * 0.19098 -- the golden section -- which made
+		// long pattern fades silently impossible.) always leave at least
+		// minSustain of body so the event isn't dropped by playSynths.
+		fadeOut = ~fadeTime.value;
+		fadeIn = ~fadeInTime.value ?? { if(~bgn != 0) { fadeOut } { 0.0 } };
+		totalFade = fadeOut + fadeIn;
+		// reserve two minSustains of body: one so playSynths' >= minSustain
+		// check passes, one as margin against float rounding in the
+		// subtraction below.
+		maxFade = max(sustain - (aux.minSustain * 2), 0.0);
+		if(totalFade > maxFade) {
+			fadeOut = fadeOut * maxFade / max(totalFade, 1e-9);
+			fadeIn = fadeIn * maxFade / max(totalFade, 1e-9);
+		};
+		~fadeTime = fadeOut;
+		~fadeInTime = fadeIn;
+		~sustain = sustain - (fadeOut + fadeIn);
 		~spd = spd;
 		~endspd = endspd;
 
